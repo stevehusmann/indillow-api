@@ -10,8 +10,10 @@ const res = require('express/lib/response');
 
 router.post("/jobs", async (req, res, next) => {
   
-  if (req.method === 'POST') {
-    res.status(200).send('ok');
+  if(req.method === 'OPTIONS') {
+    return res.status(200).json(({
+        body: "OK"
+    }))
   }
   
   const URL = req.body.URL;
