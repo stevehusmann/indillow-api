@@ -6,7 +6,7 @@ const axios = require('axios');
 
 const {Client} = require("@googlemaps/google-maps-services-js");
 
-const allowCors = fn => async (req, res) => {
+router.post("/jobs", async (req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', true)
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
@@ -18,13 +18,7 @@ const allowCors = fn => async (req, res) => {
     res.status(200).json({
       body: "OK"
   })
-    return
-  }
-  return await fn(req, res)
-}
-
-
-router.post("/jobs", async (req, res, next) => {
+  
   const URL = req.body.URL;
   const jobKeys = req.body.jobKeys;
   const jobsArray = [];
@@ -151,4 +145,4 @@ router.post("/jobdetails", async (req, res, next) => {
   });
 });
 
-module.exports = allowCors(router);
+module.exports = router;
