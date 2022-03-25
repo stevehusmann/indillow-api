@@ -12,7 +12,7 @@ router.post("/jobs", async (req, res, next) => {
   
   if(req.method === 'OPTIONS') {
     return res.status(200).json(({
-        body: "OK"
+        body: "ok"
     }))
   }
   
