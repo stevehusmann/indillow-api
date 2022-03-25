@@ -5,16 +5,10 @@ const cheerio = require('cheerio');
 const axios = require('axios');
 
 const {Client} = require("@googlemaps/google-maps-services-js");
-const res = require('express/lib/response');
-
 
 router.post("/jobs", async (req, res, next) => {
   
-  if(req.method === 'OPTIONS') {
-    return res.status(200).json(({
-        body: "ok"
-    }))
-  }
+  res.status(200).
   
   const URL = req.body.URL;
   const jobKeys = req.body.jobKeys;
