@@ -5,6 +5,7 @@ const cheerio = require('cheerio');
 const axios = require('axios');
 
 const {Client} = require("@googlemaps/google-maps-services-js");
+const res = require('express/lib/response');
 
 router.post("/jobs", async (req, res, next) => {
   const URL = req.body.URL;
@@ -116,6 +117,10 @@ async function fetchHTML(url) {
     console.log('cheerio: ' + error);
   }
 }
+
+router.get("/test", (req, res, next) => {
+  res.send("This is a test!!!!");
+});
 
 router.post("/jobdetails", async (req, res, next) => {
   const URL = 'https://' + req.body.URL;
