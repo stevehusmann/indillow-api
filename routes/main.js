@@ -10,7 +10,7 @@ const res = require('express/lib/response');
 
 router.post("/jobs", async (req, res, next) => {
   
-  if (req.method === 'OPTIONS') {
+  if (req.method === 'POST' || 'GET') {
     return res.status(200).send('ok');
   }
   
