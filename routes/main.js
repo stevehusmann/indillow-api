@@ -7,13 +7,13 @@ const axios = require('axios');
 const {Client} = require("@googlemaps/google-maps-services-js");
 const res = require('express/lib/response');
 
-const handler = (request, response)  => {
-  if (request.method === 'OPTIONS') {
-    return response.status(200).send('ok');
-  }
-};
 
 router.post("/jobs", async (req, res, next) => {
+  
+  if (req.method === 'OPTIONS') {
+    return res.status(200).send('ok');
+  }
+  
   const URL = req.body.URL;
   const jobKeys = req.body.jobKeys;
   const jobsArray = [];
