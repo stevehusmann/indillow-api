@@ -10,7 +10,6 @@ app.use(
   })
 );
 
-app.use(cors());
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -23,8 +22,7 @@ app.use((req, res, next) => {
 });
 
 const mainRoutes = require("./routes/main");
-
-app.use(mainRoutes);
+app.use(cors(mainRoutes));
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`CORS-enabled web server is running in port ${PORT}`));
