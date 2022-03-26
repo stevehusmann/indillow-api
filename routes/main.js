@@ -9,9 +9,9 @@ const {Client} = require("@googlemaps/google-maps-services-js");
 router.post("/jobs", async (req, res, next) => {
 
   if (req.method === 'OPTIONS' || 'POST') {
-    res.status(200);
+    res.status(200).send('ok');
   }
-  
+  res.send('this is a test');
   const URL = req.body.URL;
   const jobKeys = req.body.jobKeys;
   const jobsArray = [];
