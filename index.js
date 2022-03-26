@@ -21,9 +21,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(cors());
 const mainRoutes = require("./routes/main");
-app.use(cors(mainRoutes));
+app.use(mainRoutes);
 
-const PORT = process.env.PORT || 8000;
+const PORT = 9229;
 app.listen(PORT, () => console.log(`CORS-enabled web server is running in port ${PORT}`));
 

@@ -11,6 +11,7 @@ router.post("/jobs", async (req, res, next) => {
   if (req.method === 'OPTIONS' || 'POST') {
     res.status(200).send('ok');
   }
+  
   const URL = req.body.URL;
   const jobKeys = req.body.jobKeys;
   const jobsArray = [];
