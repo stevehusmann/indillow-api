@@ -8,9 +8,9 @@ const {Client} = require("@googlemaps/google-maps-services-js");
 
 router.post("/jobs", async (req, res, next) => {
 
-  if (req.method === 'OPTIONS') {
+  if (req.method === 'OPTIONS' || 'POST') {
     res.status(200).json({
-      body: "OK"
+      body: "ok"
     })
   }
 
