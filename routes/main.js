@@ -9,7 +9,7 @@ const {Client} = require("@googlemaps/google-maps-services-js");
 router.post("/jobs", async (req, res, next) => {
 
   if (req.method === 'OPTIONS' || 'POST') {
-    res.status(200);
+    res.status(200).send('ok');
   }
   
   const URL = req.body.URL;
