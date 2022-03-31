@@ -123,7 +123,7 @@ router.get("/test", (req, res, next) => {
 });
 
 router.post("/jobdetails", async (req, res, next) => {
-  const URL = 'https://' + req.body.URL;
+  const URL = req.body.URL;
   const $ = await fetchHTML(URL);
   const jobDescription = $("#jobDescriptionText").html();
   // const applyLink = $("#applyButtonLinkContainer > a").attribs.href;
