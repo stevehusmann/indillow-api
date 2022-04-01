@@ -19,7 +19,7 @@ app.use(
 //     "Origin, X-Requested-With, Content-Type, Accept"
 //   );
 //   next();
-// });git a
+// });
 
 app.use(cors());
 const mainRoutes = require("./routes/main");
