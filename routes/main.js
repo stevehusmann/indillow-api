@@ -38,7 +38,7 @@ async function getBrowserInstance() {
 router.post("/jobs", async (req, res, next) => {
 
   const URL = req.body.URL;
-  const jobKeys = req.body.jobKeys;
+  const jobKeys = req.body.jobKeys || [];
   const jobsArray = [];
   let browser = null;
   try {
