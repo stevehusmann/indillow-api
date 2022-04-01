@@ -41,18 +41,19 @@ router.post("/jobs", async (req, res, next) => {
   const jobKeys = req.body.jobKeys;
   const jobsArray = [];
   let browser = null;
-  try{
+  try {
     browser = await getBrowserInstance();
     const page = await browser.newPage();
-    await page.goto(URL);
+    await page.goto(URL, {waitUntil: "domcontentloaded"});
 
     const resultsArray = await page.evaluate(() => {
       try {
+        console.log(window.mosaic.providerData["mosaic-provider-jobcards"].metaData.mosaicProviderJobCardsModel.results);
         return window.mosaic.providerData["mosaic-provider-jobcards"].metaData.mosaicProviderJobCardsModel.results;
       } catch (error) {
         console.log('Puppeteer JobCard Error: ' + error);
       }
-    })
+    });
     // add data from initial JS object
     if (resultsArray) {
       resultsArray.map(async (job) => {
