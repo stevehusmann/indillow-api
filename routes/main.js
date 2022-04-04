@@ -53,10 +53,9 @@ router.post("/jobs", async (req, res, next) => {
         return ('Puppeteer JobCard Error: ' + error);
       }
     });
-    console.log(resultsArray);
     // add data from initial JS object
     if (resultsArray) {
-      resultsArray.map(async (job) => {
+      resultsArray?.map(async (job) => {
         if(!jobKeys.includes(job.jobkey)){
           if(job.loceTagValueList) {
             let address = null;
