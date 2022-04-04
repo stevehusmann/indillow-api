@@ -40,7 +40,7 @@ router.post("/jobs", async (req, res, next) => {
   try {
     browser = await getBrowserInstance();
     const page = await browser.newPage();
-    await page.goto(URL);
+    await page.goto(URL, {waitUntil: "domcontentloaded"});
     const resultsArray = await page.evaluate(() => {
       try {
         return window.mosaic.providerData["mosaic-provider-jobcards"].metaData.mosaicProviderJobCardsModel.results;
