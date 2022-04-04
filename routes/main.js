@@ -45,53 +45,55 @@ router.post("/jobs", async (req, res, next) => {
     browser = await getBrowserInstance();
     const page = await browser.newPage();
     await page.goto(URL, {waitUntil: "domcontentloaded"});
-
+"add"
     const resultsArray = await page.evaluate(() => {
       try {
         return window.mosaic.providerData["mosaic-provider-jobcards"].metaData.mosaicProviderJobCardsModel.results;
       } catch (error) {
         return ('Puppeteer JobCard Error: ' + error);
+      } finally {
+        if (resultsArray) {
+          resultsArray.map(async (job) => {
+            if(!jobKeys.includes(job.jobkey)){
+              if(job.loceTagValueList) {
+                let address = null;
+                let neighborhood = null;
+                job.loceTagValueList.map(locString => {
+                  const locationKey = locString.split('"')[1];
+                  const locationValue = locString.split('"')[3];
+    
+                  if (locationKey === 'address') {
+                    address = `${locationValue}, ${job.formattedLocation}`;
+                  } else if (locationKey === 'neighborhood') {
+                    neighborhood = locationValue;
+                  }
+                });
+                if (address) {
+                  jobsArray.push({
+                    key: job.jobkey,
+                    jobTitle: job.title,
+                    company: job.company,
+                    link: 'https://indeed.com' + job.link,
+                    urgentlyHiring: job.urgentlyHiring,
+                    salary: job.salarySnippet.text,
+                    address: address,
+                    neighborhood: neighborhood,
+                    jobTypes: job.jobTypes,
+                    logo: job.companyBrandingAttributes ? job.companyBrandingAttributes.logoUrl : null,              
+                    headerImageUrl: job.companyBrandingAttributes ? job.companyBrandingAttributes.headerImageUrl : null,
+                    formattedRelativeTime: job.formattedRelativeTime,
+    
+                  });
+                }
+              }
+              jobKeys.push(job.jobkey);
+            }
+          });
+        }
       }
     });
     // add data from initial JS object
-    if (resultsArray) {
-      resultsArray?.map(async (job) => {
-        if(!jobKeys.includes(job.jobkey)){
-          if(job.loceTagValueList) {
-            let address = null;
-            let neighborhood = null;
-            job.loceTagValueList.map(locString => {
-              const locationKey = locString.split('"')[1];
-              const locationValue = locString.split('"')[3];
 
-              if (locationKey === 'address') {
-                address = `${locationValue}, ${job.formattedLocation}`;
-              } else if (locationKey === 'neighborhood') {
-                neighborhood = locationValue;
-              }
-            });
-            if (address) {
-              jobsArray.push({
-                key: job.jobkey,
-                jobTitle: job.title,
-                company: job.company,
-                link: 'https://indeed.com' + job.link,
-                urgentlyHiring: job.urgentlyHiring,
-                salary: job.salarySnippet.text,
-                address: address,
-                neighborhood: neighborhood,
-                jobTypes: job.jobTypes,
-                logo: job.companyBrandingAttributes ? job.companyBrandingAttributes.logoUrl : null,              
-                headerImageUrl: job.companyBrandingAttributes ? job.companyBrandingAttributes.headerImageUrl : null,
-                formattedRelativeTime: job.formattedRelativeTime,
-
-              });
-            }
-          }
-          jobKeys.push(job.jobkey);
-        }
-      });
-    }
     // add GeoLocation Data
     try {
       const addLocationData = await Promise.all(jobsArray.map(async (job) => {
