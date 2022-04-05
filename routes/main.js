@@ -51,6 +51,7 @@ router.post("/jobs", async (req, res, next) => {
         return ('Puppeteer JobCard Error: ' + error);
       }
     });
+    console.log(resultsArray);
       if (Array.isArray(resultsArray)) {
         resultsArray.map(async (job) => {
           if(!jobKeys.includes(job.jobkey)){
@@ -86,6 +87,7 @@ router.post("/jobs", async (req, res, next) => {
               }
             }
             jobKeys.push(job.jobkey);
+            console.log("Successfully scraped: " + URL);
           }
         });
       }
@@ -111,7 +113,6 @@ router.post("/jobs", async (req, res, next) => {
       console.log("Geocode error: " + error)
     }
 
-    console.log("Successfully scraped: " + URL);
 
     const nextURL = await page.evaluate(() => {
       try {
