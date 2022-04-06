@@ -56,8 +56,8 @@ router.post("/jobs", async (req, res, next) => {
   try {
     browser = await puppeteer.launch(chromeOptions);
     const page = await browser.newPage();
-    await page.goto(URL, {waitUntil: "load"});
-    console.log(await page);
+    await page.goto(URL);
+    await page.waitForSelector('window.mosaic.providerData');
     const resultsArray = await page.evaluate(() => {
       try {
         return window.mosaic.providerData["mosaic-provider-jobcards"].metaData.mosaicProviderJobCardsModel.results;
