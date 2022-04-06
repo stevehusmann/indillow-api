@@ -15,7 +15,6 @@ router.post("/jobs", async (req, res, next) => {
     headless: true,
     defaultViewport: null,
     args: [
-        "--incognito",
         "--no-sandbox",
         "--single-process",
         "--no-zygote"
