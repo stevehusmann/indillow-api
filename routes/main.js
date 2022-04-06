@@ -20,9 +20,9 @@ router.post("/jobs", async (req, res, next) => {
         "--no-zygote"
     ],
   };
-  
+  let browser = null;
   try {
-    const browser = await puppeteer.launch(chromeOptions);
+    browser = await puppeteer.launch(chromeOptions);
     const page = await browser.newPage();
     await page.goto(URL, {waitUntil: "load"});
     const resultsArray = await page.evaluate(() => {
