@@ -86,7 +86,6 @@ router.post("/jobs", async (req, res, next) => {
               }
             }
             jobKeys.push(job.jobkey);
-            console.log("Successfully scraped: " + URL);
           }
         });
       }
@@ -127,7 +126,7 @@ router.post("/jobs", async (req, res, next) => {
       }
       
     });
-
+    console.log("Successfully scraped: " + URL);
     res.send({
       jobsArray: jobsArray,
       nextURL: nextURL,
