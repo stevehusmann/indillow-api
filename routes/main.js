@@ -91,7 +91,6 @@ router.post("/jobs", async (req, res, next) => {
         });
       }
 
-
     // add GeoLocation Data
     try {
       const addLocationData = await Promise.all(jobsArray.map(async (job) => {
