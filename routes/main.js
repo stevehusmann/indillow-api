@@ -1,48 +1,30 @@
 const dotenv = require('dotenv').config();
 const router = require("express").Router();
-const chromium = require('chrome-aws-lambda');
+const puppeteer = require("puppeteer");
 const cheerio = require('cheerio');
 const axios = require('axios');
 
 const {Client} = require("@googlemaps/google-maps-services-js");
 
-async function getBrowserInstance() {
-	const executablePath = await chromium.executablePath
-
-	if (!executablePath) {
-		// running locally
-		const puppeteer = require('puppeteer')
-		return puppeteer.launch({
-			args: chromium.args,
-			headless: true,
-			defaultViewport: {
-				width: 1280,
-				height: 720
-			},
-			ignoreHTTPSErrors: true
-		})
-	}
-
-	return chromium.puppeteer.launch({
-		args: chromium.args,
-		defaultViewport: {
-			width: 1280,
-			height: 720
-		},
-		executablePath,
-		headless: chromium.headless,
-		ignoreHTTPSErrors: true
-	})
-}
-
 router.post("/jobs", async (req, res, next) => {
   const URL = req.body.URL;
   const jobKeys = req.body.jobKeys || [];
   const jobsArray = [];
-  let browser = null;
+  
+  const chromeOptions = {
+    headless: true,
+    defaultViewport: null,
+    args: [
+        "--incognito",
+        "--no-sandbox",
+        "--single-process",
+        "--no-zygote"
+    ],
+  };
+  
   try {
-    browser = await getBrowserInstance();
-    let page = await browser.newPage();
+    const browser = await puppeteer.launch(chromeOptions);
+    const page = await browser.newPage();
     await page.goto(URL, {waitUntil: "load"});
     const resultsArray = await page.evaluate(() => {
       try {
