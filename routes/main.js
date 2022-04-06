@@ -57,7 +57,7 @@ router.post("/jobs", async (req, res, next) => {
     browser = await puppeteer.launch(chromeOptions);
     const page = await browser.newPage();
     await page.goto(URL, {waitUntil: "load"});
-    console.log(page);
+    console.log(await page);
     const resultsArray = await page.evaluate(() => {
       try {
         return window.mosaic.providerData["mosaic-provider-jobcards"].metaData.mosaicProviderJobCardsModel.results;
@@ -148,7 +148,7 @@ router.post("/jobs", async (req, res, next) => {
     });
   }
   catch (e) {
-    console.log(e);
+    console.log("intial Puppeteer fail: " + e);
 
   } finally {
     if (browser != null) {
