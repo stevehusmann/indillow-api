@@ -174,12 +174,14 @@ router.post("/jobdetails", async (req, res, next) => {
   const URL = req.body.URL;
   const $ = await fetchHTML(URL);
   const jobDescription = $("#jobDescriptionText").html();
-  const applyLinkText = $("#applyButtonLinkContainer a").html();
-  const applyLinkContainer = $("#applyButtonLinkContainer a");
-  const applyLink = applyLinkContainer[0].attribs.href;
+  let applyLink = null;
+  if ($("#applyButtonLinkContainer")) {
+    const applyLinkContainer = $("#applyButtonLinkContainer a");
+    applyLink = applyLinkContainer[0]?.attribs.href;
+  }
+  
   res.send({
     jobDescription: jobDescription,
-    applyLinkText: applyLinkText,
     applyLink: applyLink
   });
 });
