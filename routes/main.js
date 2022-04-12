@@ -21,10 +21,15 @@ router.post("/jobs", async (req, res, next) => {
   const jobsArray = [];
   const $ = await fetchHTML(URL);
   const mosaicData = $("#mosaic-data").html();
-  const firstTrim = mosaicData.split('window.mosaic.providerData["mosaic-provider-jobcards"]={"metaData":{"mosaicProviderJobCardsModel":')[1];
-  const secondTrim = firstTrim.split(',"searchTimestamp"')[0];
-  const resultsArrayString = secondTrim.split('"results":')[1];
-  const resultsArray = JSON.parse(resultsArrayString);
+  let resultsArray = [];
+  if (mosaicData) {
+    const firstTrim = mosaicData.split('window.mosaic.providerData["mosaic-provider-jobcards"]={"metaData":{"mosaicProviderJobCardsModel":')[1];
+    const secondTrim = firstTrim.split(',"searchTimestamp"')[0];
+    const resultsArrayString = secondTrim.split('"results":')[1];
+    resultsArray = JSON.parse(resultsArrayString);
+  } else {
+    resultsArray = null;
+  }
   if (Array.isArray(resultsArray)) {
     resultsArray.map(async (job) => {
       if(!jobKeys.includes(job.jobkey)){
