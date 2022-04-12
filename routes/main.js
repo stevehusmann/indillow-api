@@ -84,12 +84,8 @@ router.post("/jobs", async (req, res, next) => {
       } catch (error){
         console.log("Geocode error: " + error)
       }
-
-      let nextURL = '';
-      const isNextButton = $('a[aria-label="Next"]');
-      if(!isNextButton) {
-        nextURL = null;
-      } else {
+      let nextURL = null;
+      if ($('a[aria-label="Next"]')) {
         const href = $('a[aria-label="Next"]').attr('href');
         const pp = $('a[aria-label="Next"]').attr('data-pp');
         nextURL = 'http://indeed.com' + href + '&pp=' + pp;
