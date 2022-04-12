@@ -22,6 +22,7 @@ router.post("/jobs", async (req, res, next) => {
   try {
     const $ = await fetchHTML(URL);
     const mosaicData = $("#mosaic-data").html();
+    console.log(mosaicData);
     const firstTrim = mosaicData.split('window.mosaic.providerData["mosaic-provider-jobcards"]={"metaData":{"mosaicProviderJobCardsModel":')[1];
     const secondTrim = firstTrim.split(',"searchTimestamp"')[0];
     const resultsArrayString = secondTrim.split('"results":')[1];
