@@ -84,12 +84,12 @@ router.post("/jobs", async (req, res, next) => {
 
     let nextURL = '';
     const isNextButton = $('a[aria-label="Next"]');
-    if(!isNextButton) {
-      nextURL = null;
-    } else {
+    if(isNextButton) {
       const href = $('a[aria-label="Next"]').attr('href');
       const pp = $('a[aria-label="Next"]').attr('data-pp');
       nextURL = 'http://indeed.com' + href + '&pp=' + pp;
+    } else {
+      nextURL = null;
     }    
       
     console.log("Successfully scraped: " + URL);
@@ -110,7 +110,8 @@ router.get("/test", (req, res, next) => {
 router.post("/jobdetails", async (req, res, next) => {
   const URL = req.body.URL;
   const $ = await fetchHTML(URL);
-  const jobDescription = $("#jobDescriptionText").html();
+  const jobDescription = $("#jobDescriptionText").text();
+  
   
   res.send({
     jobDescription: jobDescription
