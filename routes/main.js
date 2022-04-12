@@ -86,7 +86,7 @@ router.post("/jobs", async (req, res, next) => {
       }
 
       let nextURL = '';
-      const isNextButton = $('a[aria-label="Next"]');
+      const isNextButton = $('a[aria-label="Next"]') || null;
       if(!isNextButton) {
         nextURL = null;
       } else {
