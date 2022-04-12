@@ -84,21 +84,19 @@ router.post("/jobs", async (req, res, next) => {
         console.log("Geocode error: " + error)
       }
       try {
-        let nextURL = '';
+        let nextURL = null;
         if ($('a[aria-label="Next"]')) {
           const href = $('a[aria-label="Next"]').attr('href');
           const pp = $('a[aria-label="Next"]').attr('data-pp');
           nextURL = 'http://indeed.com' + href + '&pp=' + pp;
-        } else {
-          nextURL = null;
-        }
+        } 
       } catch (e) {
         console.log('next button error: ' + e);
       }
       console.log("Successfully scraped: " + URL);
       res.send({
         jobsArray: jobsArray,
-        nextURL: nextURL,
+        nextURL: nextURL || null,
         jobKeys: jobKeys
       });
     } else {
