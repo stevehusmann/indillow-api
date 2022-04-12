@@ -86,12 +86,12 @@ router.post("/jobs", async (req, res, next) => {
 
       let nextURL = '';
       const isNextButton = $('a[aria-label="Next"]');
-      if(isNextButton) {
+      if(!isNextButton) {
+        nextURL = null;
+      } else {
         const href = $('a[aria-label="Next"]').attr('href');
         const pp = $('a[aria-label="Next"]').attr('data-pp');
         nextURL = 'http://indeed.com' + href + '&pp=' + pp;
-      } else {
-        nextURL = null;
       }    
         
       console.log("Successfully scraped: " + URL);
