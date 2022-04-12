@@ -19,9 +19,9 @@ router.post("/jobs", async (req, res, next) => {
   const URL = req.body.URL;
   const jobKeys = req.body.jobKeys || [];
   const jobsArray = [];
-  const $ = await fetchHTML(URL);
-  const mosaicData = $("#mosaic-data").html();
-
+  try {
+    const $ = await fetchHTML(URL);
+    const mosaicData = $("#mosaic-data").html();
     const firstTrim = mosaicData.split('window.mosaic.providerData["mosaic-provider-jobcards"]={"metaData":{"mosaicProviderJobCardsModel":')[1];
     const secondTrim = firstTrim.split(',"searchTimestamp"')[0];
     const resultsArrayString = secondTrim.split('"results":')[1];
@@ -96,7 +96,9 @@ router.post("/jobs", async (req, res, next) => {
         nextURL: nextURL,
         jobKeys: jobKeys
       });
-    
+    } catch (e) {
+      console.log(e);
+    }
   });
 
 
