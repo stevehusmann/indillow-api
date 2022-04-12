@@ -102,7 +102,7 @@ router.post("/jobs", async (req, res, next) => {
         jobKeys: jobKeys
       });
     } else {
-      console.log("cheerio isn't loading");
+      console.log($.html());
     }
   });
 
