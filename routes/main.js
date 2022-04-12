@@ -11,7 +11,7 @@ async function fetchHTML(url) {
     return cheerio.load(data);
   }
   catch (error) {
-    console.log('cheerio: ' + error);
+    console.log('cheerio fetchHTML: ' + error);
   }
 }
 
@@ -21,7 +21,7 @@ router.post("/jobs", async (req, res, next) => {
   const jobsArray = [];
     const $ = await fetchHTML(URL);
     const mosaicData = $("#mosaic-data").html();
-    try {
+    if (mosaicData) {
     const firstTrim = mosaicData.split('window.mosaic.providerData["mosaic-provider-jobcards"]={"metaData":{"mosaicProviderJobCardsModel":')[1];
     const secondTrim = firstTrim.split(',"searchTimestamp"')[0];
     const resultsArrayString = secondTrim.split('"results":')[1];
@@ -95,16 +95,14 @@ router.post("/jobs", async (req, res, next) => {
       } catch (e) {
         console.log('next button error: ' + e);
       }
-
-        
       console.log("Successfully scraped: " + URL);
       res.send({
         jobsArray: jobsArray,
         nextURL: nextURL,
         jobKeys: jobKeys
       });
-    } catch (e) {
-      console.log("cheerio isn't loading it seems like" + e);
+    } else {
+      console.log("cheerio isn't loading");
     }
   });
 
