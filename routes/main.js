@@ -115,7 +115,7 @@ router.post("/jobdetails", async (req, res, next) => {
   const URL = req.body.URL;
   try {
     const $ = await fetchHTML(URL);
-    const jobDescription = $("#jobDescriptionText").html();
+    const jobDescription = $.html();
   } catch (e) {
     console.log(e);
   }
