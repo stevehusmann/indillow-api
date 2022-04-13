@@ -152,7 +152,7 @@ router.post("/jobs", async (req, res, next) => {
         jobKeys: jobKeys
       });
     } else {
-      console.log("cheerio error");
+      console.log($.html());
     }
   });
 
