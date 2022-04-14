@@ -1,54 +1,41 @@
 const dotenv = require('dotenv').config();
 const router = require("express").Router();
 const cheerio = require('cheerio');
-const request = require('request');
-const axios = require('axios');
-
+const HttpsProxyAgent = require('https-proxy-agent');
 const {Client} = require("@googlemaps/google-maps-services-js");
 const res = require('express/lib/response');
+const axios = require('axios');
 
-// async function proxyGenerator () {
-//   let ip_addresses = [];
-//   let port_numbers = [];
-//   const {data} = await axios.get("https://sslproxies.org/") 
-//   const $ = cheerio.load(data);
+async function proxyGenerator () {
+  let ip_addresses = [];
+  let port_numbers = [];
+  const axios = require('axios');
+  const {data} = await axios.get("https://sslproxies.org/") 
+  const $ = cheerio.load(data);
 
-//   $("td:nth-child(1)").each(function(index, value) {
-//     ip_addresses[index] = $(this).text();
-//   });
+  $("td:nth-child(1)").each(function(index, value) {
+    ip_addresses[index] = $(this).text();
+  });
 
-//   $("td:nth-child(2)").each(function(index, value) {
-//     port_numbers[index] = $(this).text();
-//   });
+  $("td:nth-child(2)").each(function(index, value) {
+    port_numbers[index] = $(this).text();
+  });
 
-//   let random_number = Math.floor(Math.random() * 100);
-//   const proxy = {
-//     host: ip_addresses[random_number],
-//     port: port_numbers[random_number]
-//   }
-//   return proxy;
-// };
-  
-
-
-// async function fetchHTML(url) {
-//   const options = {
-//     url: url,
-//     method: "GET",
-//     proxy: await proxyGenerator()
-//   };
-//   console.log(options);
-  // request(options, function(error, response, html) {
-  //   if (!error && response.statusCode == 200) {
-  //     return cheerio.load(html);
-  //   } else {
-  //     console.log("Error scraping site, please try again");
-  //   }
-  // });
-
+  const random_number = Math.floor(Math.random() * 100);
+  const proxy = `http://${ip_addresses[random_number]}:${port_numbers[random_number]}`;
+  console.log("new proxy: " + proxy);
+  return proxy;
+};
 
 async function fetchHTML(url) {
-  // const proxy = await proxyGenerator();
+  // const proxyURL = await proxyGenerator();
+  // const axiosDefaultConfig = {
+  //   baseURL: url,
+  //   proxy: false,
+  //   httpsAgent: new HttpsProxyAgent(proxyURL)
+  // };
+
+  // const axiosProxy = require('axios').create(axiosDefaultConfig);
   try {
     const { data } = await axios.get(url)
     return cheerio.load(data);
@@ -61,7 +48,8 @@ async function fetchHTML(url) {
 router.post("/test", async (req, res, next) => {
   const URL = req.body.URL;
   const $ = await fetchHTML(URL);
-  res.send ($("#mosaic-data").html());
+
+  res.send ($.html());
 });
 
 
@@ -164,15 +152,11 @@ router.get("/test", (req, res, next) => {
 
 
 router.post("/jobdetails", async (req, res, next) => {
-  const URL = req.body.URL;  
-  try {
-    const $ = await fetchHTML(URL);
-    const jobDescription = $("#jobDescriptionText");
-  } catch (e) {
-    console.log("job details not loading: " + e);
-  }
+  const URL = req.body.URL;
+  console.log(URL);
+  const $ = await fetchHTML(URL);
+  const jobDescription = $("#jobDescriptionText").html();
 
-  
   res.send({
     jobDescription: jobDescription
   });
