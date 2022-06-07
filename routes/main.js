@@ -11,10 +11,11 @@ async function fetchHTML(ip, url) {
   const axiosDefaultConfig = {
     baseURL: url,
     proxy: false,
-    httpsAgent: new HttpsProxyAgent(ip)
+    httpsAgent: new HttpsProxyAgent('http://' + ip)
   };
 
   const axiosProxy = require('axios').create(axiosDefaultConfig);
+  
   try {
     const { data } = await axiosProxy.get(url)
     return cheerio.load(data);
@@ -24,15 +25,6 @@ async function fetchHTML(ip, url) {
   }
 }
 
-// router.post("/test", async (req, res, next) => {
-//   console.log("remote address" + req.socket.remoteAddress);
-//   console.log(req.ip);
-  
-//   const URL = req.body.URL;
-//   const $ = await fetchHTML(URL);
-
-//   res.send ($.html());
-// });
 
 
 router.post("/jobs", async (req, res, next) => {
