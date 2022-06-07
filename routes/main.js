@@ -6,19 +6,17 @@ const {Client} = require("@googlemaps/google-maps-services-js");
 const res = require('express/lib/response');
 const axios = require('axios');
 
-async function fetchHTML(url) {
+async function fetchHTML(ip, url) {
 
+  const axiosDefaultConfig = {
+    baseURL: url,
+    proxy: false,
+    httpsAgent: new HttpsProxyAgent(ip)
+  };
 
-
-  // const axiosDefaultConfig = {
-  //   baseURL: url,
-  //   proxy: false,
-  //   httpsAgent: new HttpsProxyAgent(proxyURL)
-  // };
-
-  // const axiosProxy = require('axios').create(axiosDefaultConfig);
+  const axiosProxy = require('axios').create(axiosDefaultConfig);
   try {
-    const { data } = await axios.get(url)
+    const { data } = await axiosProxy.get(url)
     return cheerio.load(data);
   }
   catch (error) {
@@ -38,16 +36,12 @@ async function fetchHTML(url) {
 
 
 router.post("/jobs", async (req, res, next) => {
-  const parseIp = (req) =>
-  req.headers['x-forwarded-for']?.split(',').shift() || req.socket?.remoteAddress
-
-  console.log(parseIp(req));
-
-
+  const parseIp = (req) => req.headers['x-forwarded-for']?.split(',').shift() || req.socket?.remoteAddress;
+  const IP = parseIP(req);
   const URL = req.body.URL;
   const jobKeys = req.body.jobKeys || [];
   const jobsArray = [];
-    const $ = await fetchHTML(URL);
+    const $ = await fetchHTML(IP,URL);
     const mosaicData = $("#mosaic-data").html();
     if (mosaicData) {
     const firstTrim = mosaicData.split('window.mosaic.providerData["mosaic-provider-jobcards"]={"metaData":{"mosaicProviderJobCardsModel":')[1];
