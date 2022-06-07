@@ -6,29 +6,10 @@ const {Client} = require("@googlemaps/google-maps-services-js");
 const res = require('express/lib/response');
 const axios = require('axios');
 
-async function proxyGenerator () {
-  let ip_addresses = [];
-  let port_numbers = [];
-  const axios = require('axios');
-  const {data} = await axios.get("https://sslproxies.org/") 
-  const $ = cheerio.load(data);
-
-  $("td:nth-child(1)").each(function(index, value) {
-    ip_addresses[index] = $(this).text();
-  });
-
-  $("td:nth-child(2)").each(function(index, value) {
-    port_numbers[index] = $(this).text();
-  });
-
-  const random_number = Math.floor(Math.random() * 100);
-  const proxy = `http://${ip_addresses[random_number]}:${port_numbers[random_number]}`;
-  console.log("new proxy: " + proxy);
-  return proxy;
-};
-
 async function fetchHTML(url) {
-  // const proxyURL = await proxyGenerator();
+
+
+
   // const axiosDefaultConfig = {
   //   baseURL: url,
   //   proxy: false,
@@ -45,15 +26,21 @@ async function fetchHTML(url) {
   }
 }
 
-router.post("/test", async (req, res, next) => {
-  const URL = req.body.URL;
-  const $ = await fetchHTML(URL);
+// router.post("/test", async (req, res, next) => {
+//   console.log("remote address" + req.socket.remoteAddress);
+//   console.log(req.ip);
+  
+//   const URL = req.body.URL;
+//   const $ = await fetchHTML(URL);
 
-  res.send ($.html());
-});
+//   res.send ($.html());
+// });
 
 
 router.post("/jobs", async (req, res, next) => {
+  console.log("remote address" + req.socket.remoteAddress);
+  console.log(req.ip);
+
   const URL = req.body.URL;
   const jobKeys = req.body.jobKeys || [];
   const jobsArray = [];
