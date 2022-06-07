@@ -1,7 +1,7 @@
 const dotenv = require('dotenv').config();
 const router = require("express").Router();
 const cheerio = require('cheerio');
-const HttpsProxyAgent = require('https-proxy-agent');
+const httpsProxyAgent = require('https-proxy-agent');
 const {Client} = require("@googlemaps/google-maps-services-js");
 const res = require('express/lib/response');
 const axios = require('axios');
@@ -11,13 +11,11 @@ async function fetchHTML(ip, url) {
   const axiosDefaultConfig = {
     baseURL: url,
     proxy: false,
-    httpsAgent: new HttpsProxyAgent('http://' + ip)
+    httpsAgent: new httpsProxyAgent('http://' + ip)
   };
 
-  const axiosProxy = require('axios').create(axiosDefaultConfig);
-  
   try {
-    const { data } = await axiosProxy.get(url)
+    const { data } = await axios.request(axiosDefaultConfig);
     return cheerio.load(data);
   }
   catch (error) {
