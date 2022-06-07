@@ -37,7 +37,7 @@ async function fetchHTML(ip, url) {
 
 router.post("/jobs", async (req, res, next) => {
   const parseIp = (req) => req.headers['x-forwarded-for']?.split(',').shift() || req.socket?.remoteAddress;
-  const IP = parseIP(req);
+  const IP = parseIp(req);
   const URL = req.body.URL;
   const jobKeys = req.body.jobKeys || [];
   const jobsArray = [];
