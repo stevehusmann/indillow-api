@@ -5,13 +5,14 @@ const httpsProxyAgent = require('https-proxy-agent');
 const {Client} = require("@googlemaps/google-maps-services-js");
 const res = require('express/lib/response');
 const axios = require('axios');
+const { get } = require('express/lib/response');
 
 async function fetchHTML(ip, url) {
 
   const axiosDefaultConfig = {
     baseURL: url,
     proxy: false,
-    httpsAgent: new httpsProxyAgent('http://' + ip)
+    httpsAgent: new httpsProxyAgent('http://' + ip),
   };
 
   try {
