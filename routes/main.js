@@ -15,7 +15,7 @@ async function fetchHTML(ip, url) {
   };
 
   try {
-    const { data } = await axios.get(url, axiosDefaultConfig);
+    const { data } = await axios.get(url);
     console.log(data);
     return cheerio.load(data);
     }
