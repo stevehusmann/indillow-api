@@ -13,9 +13,10 @@ async function fetchHTML(ip, url) {
     method: 'get',
     url: url,
     proxy: false,
-    responseType: 'stream',
     httpsAgent: new httpsProxyAgent('http://' + ip),
   };
+
+  console.log("send via IP address " + ip);
 
   try {
     axios.request(axiosDefaultConfig)
