@@ -7,18 +7,17 @@ const res = require('express/lib/response');
 const axios = require('axios');
 const { get } = require('express/lib/response');
 
-async function fetchHTML(ip, url) {
+async function fetchHTML(url) {
 
-  const axiosDefaultConfig = {
-    proxy: false,
-    httpsAgent: new httpsProxyAgent('http://' + ip),
-  };
+  // const axiosDefaultConfig = {
+  //   proxy: false,
+  //   httpsAgent: new httpsProxyAgent('http://' + ip),
+  // };
 
-  console.log("send via IP address " + ip);
+  // console.log("send via IP address " + ip);
 
   try {
     const { data } = await axios.get(url);
-    console.log(data);
     return cheerio.load(data);
     }
 
