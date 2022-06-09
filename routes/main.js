@@ -10,7 +10,6 @@ const { get } = require('express/lib/response');
 async function fetchHTML(ip, url) {
 
   const axiosDefaultConfig = {
-    url: url,
     proxy: false,
     httpsAgent: new httpsProxyAgent('http://' + ip),
   };
@@ -18,7 +17,7 @@ async function fetchHTML(ip, url) {
   console.log("send via IP address " + ip);
 
   try {
-    const { data } = await axios.get(axiosDefaultConfig);
+    const { data } = await axios.get(url, axiosDefaultConfig);
     console.log(data);
     return cheerio.load(data);
     }
