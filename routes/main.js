@@ -130,5 +130,4 @@ router.post("/jobdetails", async (req, res, next) => {
   });
 });
 
-
 module.exports = router;
