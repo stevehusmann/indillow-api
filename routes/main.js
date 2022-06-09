@@ -10,8 +10,10 @@ const { get } = require('express/lib/response');
 async function fetchHTML(ip, url) {
 
   const axiosDefaultConfig = {
-    baseURL: url,
+    method: 'get',
+    url: url,
     proxy: false,
+    responseType: 'stream',
     httpsAgent: new httpsProxyAgent('http://' + ip),
   };
 
