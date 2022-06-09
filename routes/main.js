@@ -11,8 +11,7 @@ async function fetchHTML(ip, url) {
 
 
   const axiosDefaultConfig = {
-    proxy: ip,
-    port: 3001
+    proxy: "https://" + ip,
   };
 
   try {
