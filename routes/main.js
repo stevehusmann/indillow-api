@@ -11,12 +11,13 @@ async function fetchHTML(ip, url) {
 
 
   const axiosDefaultConfig = {
-    proxy: false,
-    httpsAgent: new httpsProxyAgent('http://' + ip),
+    proxy: ip,
+    port: 3001
   };
 
   try {
     const { data } = await axios.get(url, axiosDefaultConfig);
+    console.log(data);
     return cheerio.load(data);
     }
 
