@@ -7,16 +7,10 @@ const res = require('express/lib/response');
 const axios = require('axios');
 const { get } = require('express/lib/response');
 
-async function fetchHTML(ip, url) {
-
-
-  const axiosDefaultConfig = {
-    proxy: "https://" + ip,
-  };
+async function fetchHTML(url) {
 
   try {
     const { data } = await axios.get(url);
-    console.log(data);
     return cheerio.load(data);
     }
 
@@ -28,12 +22,10 @@ async function fetchHTML(ip, url) {
 
 
 router.post("/jobs", async (req, res, next) => {
-  const parseIp = (req) => req.headers['x-forwarded-for']?.split(',').shift() || req.socket?.remoteAddress;
-  const IP = parseIp(req);
   const URL = req.body.URL;
   const jobKeys = req.body.jobKeys || [];
   const jobsArray = [];
-    const $ = await fetchHTML(IP,URL);
+    const $ = await fetchHTML(URL);
     const mosaicData = $("#mosaic-data").html();
     if (mosaicData) {
     const firstTrim = mosaicData.split('window.mosaic.providerData["mosaic-provider-jobcards"]={"metaData":{"mosaicProviderJobCardsModel":')[1];
@@ -129,10 +121,8 @@ router.get("/test", (req, res, next) => {
 
 router.post("/jobdetails", async (req, res, next) => {
   const URL = req.body.URL;
-  const parseIp = (req) => req.headers['x-forwarded-for']?.split(',').shift() || req.socket?.remoteAddress;
-  const IP = parseIp(req);
   console.log(URL);
-  const $ = await fetchHTML(IP,URL);
+  const $ = await fetchHTML(URL);
   const jobDescription = $("#jobDescriptionText").html();
 
   res.send({
