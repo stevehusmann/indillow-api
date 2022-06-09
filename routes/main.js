@@ -8,9 +8,9 @@ const axios = require('axios');
 const { get } = require('express/lib/response');
 
 async function fetchHTML(url) {
-
+  const randomTimeout = Math.random() * 100;
   try {
-    const { data } = await axios.get(url);
+    const { data } = await axios.get(url, {timeout: randomTimeout});
     return cheerio.load(data);
     }
 
