@@ -16,8 +16,11 @@ async function fetchHTML(ip, url) {
   };
 
   try {
-    const { data } = await axios.request(axiosDefaultConfig);
-    return cheerio.load(data);
+    axios.request(axiosDefaultConfig)
+    .then(function(res) {
+      const { data } = res;
+      return cheerio.load(data);
+    })
   }
   catch (error) {
     console.log('cheerio fetchHTML: ' + error);
