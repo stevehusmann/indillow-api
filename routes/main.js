@@ -8,9 +8,8 @@ const axios = require('axios');
 const { get } = require('express/lib/response');
 
 async function fetchHTML(url) {
-  const randomTimeout = Math.random() * 100;
   try {
-    const { data } = await axios.get(url, {timeout: randomTimeout});
+    const { data } = await axios.get('http://api.scraperapi.com?api_key='+ process.env.SCRAPER_API_KEY + '&url=' + url);
     return cheerio.load(data);
     }
 
