@@ -17,8 +17,6 @@ async function fetchHTML(url) {
   }
 }
 
-
-
 router.post("/jobs", async (req, res, next) => {
   const URL = req.body.URL;
   const jobKeys = req.body.jobKeys || [];
