@@ -19,8 +19,6 @@ async function fetchHTML(url) {
   }
 }
 
-
-
 router.post("/jobs", async (req, res, next) => {
   const URL = req.body.URL;
   const jobKeys = req.body.jobKeys || [];
@@ -114,7 +112,7 @@ router.post("/jobs", async (req, res, next) => {
       jobKeys: jobKeys
     });
   } else {
-    console.log($.html());
+    console.log(page);
   }
   });
 
