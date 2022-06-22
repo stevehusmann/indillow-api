@@ -28,8 +28,7 @@ router.post("/jobs", async (req, res, next) => {
     const secondTrim = firstTrim.split(',"searchTimestamp"')[0];
     const resultsArrayString = secondTrim.split('"results":')[1];
     const resultsArray = JSON.parse(resultsArrayString);
-    console.log("mosaicData: " + mosaicData);
-    console.log("resultsArray: " + resultsArray);
+    console.log("resultsArrayString: " + resultsArrayString);
     if (Array.isArray(resultsArray)) {
       resultsArray.map(async (job) => {
         if(!jobKeys.includes(job.jobkey)){
