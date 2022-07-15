@@ -1,7 +1,6 @@
 const dotenv = require('dotenv').config();
 const router = require("express").Router();
 const cheerio = require('cheerio');
-const {Client} = require("@googlemaps/google-maps-services-js");
 const res = require('express/lib/response');
 const axios = require('axios');
 const { get } = require('express/lib/response');
@@ -28,63 +27,40 @@ router.post("/jobs", async (req, res, next) => {
     const secondTrim = firstTrim.split(',"searchTimestamp"')[0];
     const resultsArrayString = secondTrim.split('"results":')[1];
     const resultsArray = JSON.parse(resultsArrayString);
-    console.log(resultsArray);
     if (Array.isArray(resultsArray)) {
       resultsArray.map(async (job) => {
         if(!jobKeys.includes(job.jobkey)){
-          if(job.loceTagValueList) {
-            let address = null;
-            let neighborhood = null;
-            job.loceTagValueList.map(locString => {
-              const locationKey = locString.split('"')[1];
-              const locationValue = locString.split('"')[3];
-              if (locationKey === 'address') {
-                address = `${locationValue}, ${job.formattedLocation}`;
-              } else if (locationKey === 'neighborhood') {
-                neighborhood = locationValue;
-              }
-            });
-            if (address) {
-              jobsArray.push({
-                key: job.jobkey,
-                jobTitle: job.title,
-                company: job.company,
-                link: 'https://indeed.com' + job.link,
-                urgentlyHiring: job.urgentlyHiring,
-                salary: job.salarySnippet.text,
-                address: address,
-                neighborhood: neighborhood,
-                jobTypes: job.jobTypes,
-                logo: job.companyBrandingAttributes ? job.companyBrandingAttributes.logoUrl : null,              
-                headerImageUrl: job.companyBrandingAttributes ? job.companyBrandingAttributes.headerImageUrl : null,
-                formattedRelativeTime: job.formattedRelativeTime,
-              });
-            }
-          }
+
+          jobsArray.push({
+            key: job.jobkey,
+            jobTitle: job.title,
+            company: job.company,
+            formattedLocation: job.formattedLocation,
+            link: 'https://indeed.com' + job.link,
+            urgentlyHiring: job.urgentlyHiring,
+            salary: job.salarySnippet.text,
+            jobTypes: job.jobTypes,
+            logo: job.companyBrandingAttributes ? job.companyBrandingAttributes.logoUrl : null,              
+            headerImageUrl: job.companyBrandingAttributes ? job.companyBrandingAttributes.headerImageUrl : null,
+            formattedRelativeTime: job.formattedRelativeTime,
+          });
           jobKeys.push(job.jobkey);
         }
       });
-    }
 
-      // add GeoLocation Data
+    //Fetch and Add Google Place data
       try {
         const addLocationData = await Promise.all(jobsArray.map(async (job) => {
-          const args = {
-            params: {
-              key: process.env.GOOGLE_MAPS_API_KEY,
-              address: job.address,
-            }
-          };
-          const client = new Client();
-          const geocode = await client.geocode(args).then(gcResponse => {
-            return gcResponse.data.results[0];
-          });
-          job.location = geocode.geometry.location;
-          job.placeId = geocode.place_id;
+          const query = encodeURIComponent(job.company + ' ' + job.formattedLocation)
+          const { data } = await axios.get(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&key=${process.env.GOOGLE_MAPS_API_KEY}`);
+          job.placeId = data.results[0].place_id;
+          job.address = data.results[0].formatted_address;
+          job.location = data.results[0].geometry.location;
         }))
       } catch (error){
-        console.log("Geocode error: " + error)
+        console.log("Places API error: " + error)
       }
+
       let nextURL = null;
       try {
         if ($('a[aria-label="Next"]')) {
@@ -106,7 +82,9 @@ router.post("/jobs", async (req, res, next) => {
     } else {
       console.log($.html());
     }
-  });
+  }
+});
+
 
 
 
